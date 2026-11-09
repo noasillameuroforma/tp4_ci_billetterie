@@ -211,3 +211,21 @@ def test_statistiques_et_invariant(service):
 
     assert b.statistiques()["chiffre_affaires"] == 10
     assert b.statistiques()["occupation"] == 0
+
+
+
+
+def test_reservation_dernieres_places():
+    billetterie = Billetterie(10)
+    service = Mock()
+    service.envoyer_confirmation.return_value = True
+
+    montant = billetterie.reserver(
+        10, 20, service
+    )
+
+    assert montant == 180
+    assert billetterie.places_restantes() == 0
+    assert billetterie.places_reservees() == 10
+
+    service.envoyer_confirmation.assert_called_once_with(180)
